@@ -8,6 +8,7 @@ import signal
 import sys
 import re
 
+grepStr = ""
 
 # exit program with ctl+c
 def signal_handler(signal, frame):
@@ -32,7 +33,6 @@ def redirect_factory():
                 print "second"
                 self.send_header('Location', 'https://' + str1)
             else:
-
                 print "else"
                 print self.path
                 self.send_header('Location', 'https://www.google.com')
@@ -56,6 +56,15 @@ def is_ssl_verify(url):
     os.system('echo QUIT | openssl s_client -connect %s:443 -showcerts > output.txt 2>/dev/null & sleep 2' % url)
     if os.stat("output.txt").st_size == 0:
         return False
+    elif grepStr == "":
+        return True
+
+    return is_grep()
+def is_grep():
+    global grepStr
+    os.system('grep -i %s output.txt > grep.txt' %grepStr)
+    if os.stat("grep.txt").st_size == 0:
+        return False
     return True
 
 # security for port number
@@ -67,14 +76,17 @@ def isNumber(port):
     return False
 
 def main():
+    global grepStr
 
     parser = argparse.ArgumentParser(description='HTTP redirect to HTTPS')
     parser.add_argument('--port', '-p', action="store", type=int, default=80, help='port to listen on')
     parser.add_argument('--ip', '-i', action="store", default='', help='host interface to listen on')
+    parser.add_argument('--search', '-s', action="store",type = str, default="", help='search the word in openssl answer')
 
     myargs = parser.parse_args()
     port = myargs.port
     host = myargs.ip
+    grepStr = myargs.search
 
 
     if not isNumber(port):
