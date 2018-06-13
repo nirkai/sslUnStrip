@@ -2,10 +2,6 @@
 
 import SimpleHTTPServer
 import SocketServer
-from Tkinter import *
-from tkMessageBox import *
-from time import sleep
-#import logging
 import os
 import argparse
 import signal
@@ -13,40 +9,16 @@ import sys
 import re
 
 
-flag = False
-
-def answer():
-    #global window
-    global flag
-    #s.send_header('Location', 'https://www.google.com')
-    print "self in answer is:"
-    #print s.path
-    flag = False
-    #window.quit()
-
-#window = Tk()
-
-
-
-def callback():
-    time_to_sleep = 1
-    flushIPTables()
-    sleep(time_to_sleep * 60)
-    defineIPTable()
-    print "we on the line again!\n"
-
-
+# exit program with ctl+c
 def signal_handler(signal, frame):
     flushIPTables()
     print('\nYou have been warned!\n')
     sys.exit(0)
 
-
+# handle all the browser requests, and change the http requests to https
 def redirect_factory():
     class RedirectServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
         def do_GET(self):
-            #global window
-            global flag
 
             str1 = str(self.headers)[6:str(self.headers).find('\r\n')]
             print str1
@@ -61,32 +33,32 @@ def redirect_factory():
                 self.send_header('Location', 'https://' + str1)
             else:
 
-                #Button(text='PAUSE', command=quit).pack()
-                #Button(text='OK', command=answer).pack()
                 print "else"
                 print self.path
                 self.send_header('Location', 'https://www.google.com')
-                #mainloop()
-                print "end gui"
 
             self.end_headers()
     return RedirectServer
 
+# iptables rules for redirect port 80 in eth0 to loopback
 def defineIPTable():
     os.system('sudo echo 1 > /proc/sys/net/ipv4/ip_forward')
     os.system('sudo iptables -t nat -A OUTPUT -p tcp --dport 80 -j DNAT --to-destination 127.0.0.1')
 
+# flush iptables rules at exit
 def flushIPTables():
     os.system('sudo iptables -t nat -F')
     os.system('sudo iptables -F')
     os.system('sudo echo 0 > /proc/sys/net/ipv4/ip_forward')
 
+# check if website speak in port 443
 def is_ssl_verify(url):
     os.system('echo QUIT | openssl s_client -connect %s:443 -showcerts > output.txt 2>/dev/null & sleep 2' % url)
     if os.stat("output.txt").st_size == 0:
         return False
     return True
 
+# security for port number
 def isNumber(port):
   try:
     int(port)
@@ -104,6 +76,7 @@ def main():
     port = myargs.port
     host = myargs.ip
 
+
     if not isNumber(port):
         print "invalid port"
         sys.exit(0)
@@ -112,10 +85,6 @@ def main():
     if not is_valid_ip and host != '':
         print "invalid ip"
         sys.exit(0)
-
-
-    #ip_format = re.compile(host)
-    #if ip_format.match('xx:xx:xx:xx')
 
     defineIPTable()
 
