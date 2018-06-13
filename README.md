@@ -43,4 +43,4 @@ _Attention !_
 	-	If there is a long stay because of the lan OR the web we search for don't secure, we will return to safety site.
 	-	At the end of the program, by pressing `ctl+c`, it flush all the new rules from the iptables, and not allow redirect packets.
 	-	The parser is preparation of infrastructure for future implementation, so don't use the `-p` and `-i` flags right now.
-	-	The search flag is for high security level (experience users only). For example, if you will enter `./ssl.py -s "class 3"` it will find let you to surf only to websites with class 3 level security.
+	-	The search flag is for high security level (experience users only). For example, if you will enter `./ssl.py -s "class 3"` it will let you to surf only to websites with class 3 level security.
