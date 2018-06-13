@@ -27,5 +27,6 @@ _Exit:_
 _Attention !_
 	-	The sslUnStrip program add an iptables rule to OUTPUT chain in nat table.
 	-	It also allow redirect packets.
+	-	If there is a long stay because of the lan OR the web we search for don't secure, we will return to safety site.
 	-	At the end of the program, by pressing `ctl+c`, it flush all the new rules from the iptables, and not allow redirect packets.
 	-	The parser is preparation of infrastructure for future implementation, so don't use the flags right now. 
