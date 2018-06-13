@@ -21,6 +21,19 @@ _Running:_
 	chmod +x ssl.py
 	./ssl.py
 
+_parser flags:_
+
+
+	usage: ssl.py [-h] [--port PORT] [--ip IP] [--search SEARCH]
+	
+	HTTP redirect to HTTPS
+	optional arguments:
+	  -h, --help            show this help message and exit
+	  --port PORT, -p PORT  port to listen on
+	  --ip IP, -i IP        host interface to listen on
+	  --search SEARCH, -s SEARCH
+				search the word in openssl answer
+
 _Exit:_
 	To end the program just press on `ctl+c` in terminal, as keyboard-interupt.
 
@@ -29,4 +42,5 @@ _Attention !_
 	-	It also allow redirect packets.
 	-	If there is a long stay because of the lan OR the web we search for don't secure, we will return to safety site.
 	-	At the end of the program, by pressing `ctl+c`, it flush all the new rules from the iptables, and not allow redirect packets.
-	-	The parser is preparation of infrastructure for future implementation, so don't use the flags right now. 
+	-	The parser is preparation of infrastructure for future implementation, so don't use the `-p` and `-i` flags right now.
+	-	The search flag is for high security level (experience users only). For example, if you will enter `./ssl.py -s "class 3"` it will find let you to surf only to websites with class 3 level security.
